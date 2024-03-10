@@ -8,9 +8,9 @@ let currentCube;
 /** List of stopped cube @type{Array<THREE.Mesh>} */
 const stoppedCube = [];
 /** Speed of Cube @type{number} */
-const movementSpeed = 0.03;
+let movementSpeed = 0.03;
 /** Size of each cube in x @type{number} */
-let cubeX = 2
+let cubeX = 3
 /** Size of each cube in y @type{number} */
 const cubeY = 0.5
 /** Size of each cube in z @type{number} */
@@ -32,6 +32,10 @@ const camera = new THREE.PerspectiveCamera(
   );
 /** Google color palette @type{Array<number>} */
 const palette  = [0x4285F4,0x34A853,0xFBBC05,0xEA4335]
+/** Score Element @type{HTMLElement | null} */
+const scoreElement = document.getElementById("score")
+/** Width of last stopped Cube @type{number} */
+let prevCubeX = cubeX
 
 /**
  * Initialise game.
@@ -82,12 +86,6 @@ function createCube() {
     initX*=-1
 
     // Add line edge
-    // const wireframeGeometry = new THREE.WireframeGeometry(geometry);
-    // const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
-    // const wireframe = new THREE.LineSegments(
-    //   wireframeGeometry,
-    //   wireframeMaterial
-    // );
     const edgesGeometry = new THREE.EdgesGeometry( geometry );
 		const wireframe = new THREE.LineSegments( edgesGeometry, new THREE.LineBasicMaterial( { color: 0x000000 } ) ); 
     
@@ -100,36 +98,47 @@ function createCube() {
     return newCube;
 }
 
+
 /**
  * Handle when user click
  * 
  * @returns 
  */
 function handleClick() {
-
+  // Handle logic if game over
   if (
-    stoppedCube.length > 0 &&
-    Math.abs(currentCube.position.x - stoppedCube[stoppedCube.length - 1].position.x) >
-      cubeX
+    stoppedCube.length > 0
   ) {
-    isPlayed = false;
-    alert("GAME OVER.Refresh to play again =))");
-    return;
-  }
+    const lastStoppedCube = stoppedCube[stoppedCube.length - 1];
+    const distanceX = Math.abs(lastStoppedCube.position.x-currentCube.position.x)
+    console.log(distanceX)
+    console.log(prevCubeX+cubeX)
+    if(distanceX > (prevCubeX+cubeX)/2){
+      isPlayed = false;
+      alert("GAME OVER.Refresh to play again =))");
+      return;
+    }
 
-  cubeX = stoppedCube.length > 0 ? cubeX - Math.abs(currentCube.position.x - stoppedCube[stoppedCube.length - 1].position.x) : cubeX  
+    let temp = prevCubeX
+    prevCubeX = cubeX
+    cubeX = (temp+cubeX)/2 - distanceX
 
-  if (stoppedCube.length > 0) {
-    console.log(
-        currentCube.position.x - stoppedCube[stoppedCube.length - 1].position.x
-    );
+    if (cubeX > prevCubeX) {cubeX = prevCubeX}
+    
   }
+  // if not add to stoppedCube
   stoppedCube.push(currentCube);
-  // console.log(stoppedCube)
+  // Move stoppedCube deeper
   stoppedCube.map((c) => {
     c.position.y -= 0.5;
   });
   currentCube = createCube();
+  // Update score
+  score = stoppedCube.length
+  scoreElement.innerHTML = score
+  if(score%10==0){
+    movementSpeed += 0.01
+  }
 }
 
 /**
@@ -158,7 +167,9 @@ function animate(){
   }
 };
 
-
+function updateScore(){
+  
+}
 
 
 // Run the Game 

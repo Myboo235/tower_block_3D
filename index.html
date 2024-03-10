@@ -13,8 +13,14 @@
   <style>
     *{
       font-family: 'Poppins';
+      margin: 0;
     }
-    body { margin: 0; overflow: hidden;}
+    body { 
+      margin: 0; 
+      padding: 0;
+      overflow: hidden;
+      background-color: none;
+    }
     .logoContainer{
       padding: 0.5rem;
       display: flex;
@@ -27,6 +33,18 @@
       padding: 4px;
       margin: 4px;
     }
+    .scoreContainer{
+      display: flex;
+      flex-direction: column;
+      justify-items: center;
+      align-items: center;
+      width: 100%;
+      text-transform: uppercase;
+      background: transparent;
+    }
+    #score{
+      font-size: 2rem;
+    }
   </style>
   <header>
     <div class="logoContainer">
@@ -34,7 +52,10 @@
       GDSC-DUT
     </div>
   </header>
-
+  <div class="scoreContainer">
+    <h2>Score</h2>
+    <p id="score">0</p>
+  </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script type="module" src="main.js"></script>
