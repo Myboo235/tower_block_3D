@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Tower 3D - GDSC</title>
+    //Font
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <style>
+    *{
+      font-family: 'Poppins';
+      margin: 0;
+    }
+    body { 
+      margin: 0; 
+      padding: 0;
+      overflow: hidden;
+      background-color: none;
+    }
+    .logoContainer{
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      z-index: 100;
+    }
+    .logoImage{
+      max-width: 5rem;
+      padding: 4px;
+      margin: 4px;
+    }
+    .scoreContainer{
+      display: flex;
+      flex-direction: column;
+      justify-items: center;
+      align-items: center;
+      width: 100%;
+      text-transform: uppercase;
+      background: transparent;
+    }
+    #score{
+      font-size: 2rem;
+    }
+    #container
+    {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <header>
+    <div class="logoContainer">
+      <img src="GDSC_logo.png" class="logoImage" alt="">
+      GDSC-DUT
+    </div>
+  </header>
+  <div class="scoreContainer">
+    <h2>Score</h2>
+    <p id="score">0</p>
+  </div>
+  <div id="container">
+  <div id="game" ></div>
+
+</div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="main.js"></script>
+    <!-- <script type="module" src="t.js"></script> -->
+
+</body>
+</html>
+
+<!-- <html>
+  <head>
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+
+  </head>
+  <body>
+    <div id="container">
+      <div id="game"></div>
+      <div id="score">0</div>
+      <div id="instructions">Click (or press the spacebar) to place the block</div>
+      <div class="game-over">
+        <h2>Game Over</h2>
+        <p>You did great, you're the best.</p>
+        <p>Click or spacebar to start again</p>
+      </div>
+      <div class="game-ready">
+        <div id="start-button">Start</div>
+        <div></div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.minz.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.minz.js"></script>
+    <script type="module" src="t.js"></script>
+  </body>
+</html> -->
+
