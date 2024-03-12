@@ -7,8 +7,6 @@ const MOVE_AMOUNT = 12;
 let score = 0
 // 0x4285F4
 const palette = [0xffffff,0x34A853,0xFBBC05,0xEA4335]
-const backgroundUrl =
-  "747319.png";
 
 class Stage {
     constructor() {
