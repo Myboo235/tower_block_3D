@@ -8,6 +8,10 @@ let score = 0
 // 0x4285F4
 const palette = [0xffffff,0x34A853,0xFBBC05,0xEA4335]
 
+
+
+
+
 class Stage {
     constructor() {
         // container
@@ -107,12 +111,13 @@ class Block {
         if (!this.targetBlock) {
             this.color = 0x333344;
         } else {
-            // let offset = this.index + this.colorOffset;
-            // var r = Math.sin(0.3 * offset) * 55 + 200;
-            // var g = Math.sin(0.3 * offset + 2) * 55 + 200;
-            // var b = Math.sin(0.3 * offset + 4) * 55 + 200;
-            // this.color = new THREE.Color(r / 255, g / 255, b / 255);
-            this.color = new THREE.Color(palette[score%4])
+            const rad = 0.3
+            let offset = this.index + this.colorOffset;
+            var r = Math.sin(rad * offset) * 55 + 200;
+            var g = Math.sin(rad * offset + 2) * 55 + 200;
+            var b = Math.sin(rad * offset + 4) * 55 + 200;
+            this.color = new THREE.Color(r / 255, g / 255, b / 255);
+            // this.color = new THREE.Color(palette[score%4])
         }
 
         // state

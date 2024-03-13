@@ -27,7 +27,7 @@
         color: white;
         #score {
           position: absolute;
-          top: 10rem;
+          top: 7rem;
           width: 100%;
           text-align: center;
           font-size: 10vh;
@@ -41,7 +41,8 @@
           right: 0;
           bottom: 0;
           left: 0;
-          background: url(https://images8.alphacoders.com/747/747319.png) no-repeat center center fixed;
+          background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+          /* background: url(https://images8.alphacoders.com/747/747319.png) no-repeat center center fixed; */
           background-size: cover;
         }
 
@@ -96,7 +97,7 @@
         #instructions {
           position: absolute;
           width: 100%;
-          top: 16vh;
+          top: 25vh;
           left: 0;
           text-align: center;
           transition: opacity 0.5s ease, transform 0.5s ease;
@@ -154,18 +155,20 @@
         background-color: white;
         width: 100%;
       }
+
       .logoContainer{
-      padding: 0.5rem;
+      padding:0.5rem 0;
       display: flex;
       justify-items: center;
+      align-items: center;
       flex-direction: column;
       cursor: pointer;
       z-index: 100;
+      /* background: #000; */
+      width: 15vh;
     }
     .logoImage{
       max-width: 5rem;
-      padding: 4px;
-      margin: 4px;
     }
 
     footer{
@@ -186,10 +189,9 @@
       <div class="logoContainer">
         <img src="GDSC_logo.png" class="logoImage" alt="">
         _GDSC-DUT_
-      </header>
-
-    </div>
-    <div id="container">
+        </div>
+    </header>
+    <div id="container" onmousedown="party.confetti(this)">
       <div id="game"></div>
       <div id="score">0</div>
       <div id="instructions">
@@ -201,7 +203,7 @@
         <p>Click or spacebar to start again</p>
       </div>
       <div class="game-ready">
-        <div id="start-button">Start</div>
+        <div class="button"  id="start-button" onmousedown="party.confetti(this)">Start</div>
         <div></div>
       </div>
     </div>
@@ -213,6 +215,13 @@
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+    <script>
+      party.confetti(runButton, {
+        count: party.variation.range(20, 30),
+          gravity: 800,
+      });
+    </script>
     <!-- <script type="importmap">
         {
             "imports": {
