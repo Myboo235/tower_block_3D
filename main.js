@@ -1,12 +1,14 @@
 // import * as THREE from 'three'
 console.clear();
-
 const STATES = { ACTIVE: "active", STOPPED: "stopped", MISSED: "missed" };
 const MOVE_AMOUNT = 12;
 const textElement = document.getElementById("text");
-const textContent = textElement.textContent;
+let textContent = textElement.textContent;
+const scoreNumberElement = document.getElementById("score-number");
 let currentChar = "";
 let highlightPositions = [];
+let completeSpecialString = false;
+let specialScore = 0;
 
 // highlight characters
 const highlightCharacters = () => {
@@ -104,7 +106,7 @@ class Stage {
 class Block {
   constructor(block) {
     this.STATES = { ACTIVE: "active", STOPPED: "stopped", MISSED: "missed" };
-    this.str = "GDSCDUT";
+    this.str = textContent.replace(/\s/g, "");
     this.MOVE_AMOUNT = 12;
     // set size and position
     this.targetBlock = block;
@@ -134,11 +136,11 @@ class Block {
     } else {
       const rad = 0.3;
       let offset = this.index + this.colorOffset;
-      //   var r = Math.sin(rad * offset) * 55 + 200;
-      //   var g = Math.sin(rad * offset + 2) * 55 + 200;
-      //   var b = Math.sin(rad * offset + 4) * 55 + 200;
-      //   this.color = new THREE.Color(r / 255, g / 255, b / 255);
-      this.color = new THREE.Color(palette[Math.floor(Math.random() * palette.length)]);
+      var r = Math.sin(rad * offset) * 55 + 200;
+      var g = Math.sin(rad * offset + 2) * 55 + 200;
+      var b = Math.sin(rad * offset + 4) * 55 + 200;
+      this.color = new THREE.Color(r / 255, g / 255, b / 255);
+      // this.color = new THREE.Color(palette[Math.floor(Math.random() * palette.length)]);
     }
 
     // state
@@ -155,8 +157,7 @@ class Block {
     this.material = new THREE.MeshToonMaterial({ color: this.color, shading: THREE.FlatShading });
     this.mesh = new THREE.Mesh(geometry, this.material);
     this.mesh.position.set(this.position.x, this.position.y + (this.state == STATES.ACTIVE ? 0 : 0), this.position.z);
-
-    if (score > 0) {
+    if (this.state == STATES.ACTIVE) {
       // Create canvas and draw text
       let canvas = document.createElement("canvas");
       let context = canvas.getContext("2d");
@@ -280,7 +281,7 @@ class Game {
     this.scoreContainer = document.getElementById("score");
     this.startButton = document.getElementById("start-button");
     this.instructions = document.getElementById("instructions");
-    this.scoreContainer.innerHTML = "0";
+    this.scoreContainer.innerHTML = "<div id='score-number'>0</div>";
 
     this.stage = new Stage();
 
@@ -332,7 +333,7 @@ class Game {
 
   startGame() {
     if (this.state != this.STATES.PLAYING) {
-      this.scoreContainer.innerHTML = "0";
+      this.scoreContainer.innerHTML = "<div id='score-number'>0</div>";
       this.updateState(this.STATES.PLAYING);
       this.addBlock();
     }
@@ -341,6 +342,8 @@ class Game {
   restartGame() {
     score = 0;
     highlightPositions = [];
+    specialScore = 0;
+    completeSpecialString = false;
     textElement.textContent = textContent;
     this.updateState(this.STATES.RESETTING);
 
@@ -365,7 +368,7 @@ class Game {
     TweenLite.to(countdown, cameraMoveSpeed, {
       value: 0,
       onUpdate: () => {
-        this.scoreContainer.innerHTML = String(Math.round(countdown.value));
+        this.scoreContainer.innerHTML = `<div id='score-number'>${String(Math.round(countdown.value))}</div>`;
       },
     });
 
@@ -380,7 +383,15 @@ class Game {
     let currentBlock = this.blocks[this.blocks.length - 1];
     let newBlocks = currentBlock.place();
     this.newBlocks.remove(currentBlock.mesh);
-    if (newBlocks.placed) this.placedBlocks.add(newBlocks.placed);
+    if (newBlocks.placed) {
+      this.placedBlocks.add(newBlocks.placed);
+      // call add index need to highlight
+
+      addHighlightPosition(currentChar);
+
+      // call highlight characters
+      highlightCharacters();
+    }
     if (newBlocks.chopped) {
       this.choppedBlocks.add(newBlocks.chopped);
       let positionParams = { y: "-=30", ease: Power1.easeIn, onComplete: () => this.choppedBlocks.remove(newBlocks.chopped) };
@@ -398,11 +409,6 @@ class Game {
       }
       TweenLite.to(newBlocks.chopped.position, 1, positionParams);
       TweenLite.to(newBlocks.chopped.rotation, 1, rotationParams);
-      // call add index need to highlight
-      addHighlightPosition(currentChar);
-
-      // call highlight characters
-      highlightCharacters();
     }
 
     this.addBlock();
@@ -415,7 +421,16 @@ class Game {
       return this.endGame();
     }
 
-    this.scoreContainer.innerHTML = String(this.blocks.length - 1);
+    scoreNumberElement.innerHTML = `<div id='score-number'>${String(this.blocks.length - 1 + specialScore)}</div>`;
+
+    if (highlightPositions.length === textContent.replace(/\s/g, "").length && !completeSpecialString) {
+      completeSpecialString = true;
+      specialScore = 10;
+      scoreNumberElement.innerHTML = `<div id='score-number'>${String(
+        this.blocks.length - 1 + specialScore
+      )}<span class="add-score">+ 10</span></div>`;
+    }
+    this.scoreContainer.innerHTML = scoreNumberElement.innerHTML;
 
     let newKidOnTheBlock = new Block(lastBlock);
 

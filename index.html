@@ -61,7 +61,7 @@
           top: 0;
           left: 0;
           width: 100%;
-          height: 85%;
+          height: 89%;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -112,6 +112,7 @@
           left: 0;
           text-align: center;
           transition: opacity 0.5s ease, transform 0.5s ease;
+          margin: 1.5rem 0;
 
           opacity: 0;
 
@@ -150,7 +151,7 @@
         &.ended {
           #score,
           #text {
-            transform: translateY(6vh) scale(1.5);
+            transform: translateY(2vh) scale(1.5);
             visibility: visible;
           }
           #text {
@@ -204,7 +205,34 @@
         color: rgba(0, 0, 0, 0.2); /* Màu chữ mờ */
       }
       .highlight-char {
-        color: #ff0000; /* Màu sáng khi ký tự được chọn */
+        color: #ea4335; /* Màu sáng khi ký tự được chọn */
+      }
+
+      #score-number {
+        position: relative;
+        width: max-content;
+        margin: 0 auto;
+      }
+      .add-score {
+        font-size: 2rem;
+        position: absolute;
+        color: #ea4335;
+        top: 50%;
+        right: -100%;
+        transform: translateY(-50%);
+        animation: fade-in-up 2s ease forwards;
+      }
+
+      @keyframes fade-in-up {
+        0%,
+        10% {
+          top: 50%;
+          opacity: 1;
+        }
+        100% {
+          top: -100%;
+          opacity: 0;
+        }
       }
     </style>
     <header>
@@ -215,7 +243,7 @@
     <div id="container" onmousedown="party.confetti(this)">
       <div id="game"></div>
       <p id="text" class="blur-text">GDSC DUT</p>
-      <div id="score">0</div>
+      <div id="score"><div id="score-number">0</div></div>
       <div id="instructions">Click (or press the spacebar) to place the block</div>
       <div class="game-over">
         <h2>Game Over</h2>
