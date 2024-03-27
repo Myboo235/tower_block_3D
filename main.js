@@ -9,6 +9,9 @@ let currentChar = "";
 let highlightPositions = [];
 let completeSpecialString = false;
 let specialScore = 0;
+const highestScoreElement = document.getElementById("highestScore");
+let highestScore = Number(localStorage.getItem("highestScore")) || 0;
+highestScoreElement.innerText = `Highest score: ${highestScore}`;
 
 // highlight characters
 const highlightCharacters = () => {
@@ -157,7 +160,7 @@ class Block {
     this.material = new THREE.MeshToonMaterial({ color: this.color, shading: THREE.FlatShading });
     this.mesh = new THREE.Mesh(geometry, this.material);
     this.mesh.position.set(this.position.x, this.position.y + (this.state == STATES.ACTIVE ? 0 : 0), this.position.z);
-    if (this.state == STATES.ACTIVE) {
+    if (this.state == STATES.ACTIVE && !completeSpecialString) {
       // Create canvas and draw text
       let canvas = document.createElement("canvas");
       let context = canvas.getContext("2d");
@@ -279,6 +282,7 @@ class Game {
     // UI elements
     this.mainContainer = document.getElementById("container");
     this.scoreContainer = document.getElementById("score");
+    this.textContainer = document.getElementById("textContainer");
     this.startButton = document.getElementById("start-button");
     this.instructions = document.getElementById("instructions");
     this.scoreContainer.innerHTML = "<div id='score-number'>0</div>";
@@ -333,6 +337,7 @@ class Game {
 
   startGame() {
     if (this.state != this.STATES.PLAYING) {
+      textElement.style.animation = "none";
       this.scoreContainer.innerHTML = "<div id='score-number'>0</div>";
       this.updateState(this.STATES.PLAYING);
       this.addBlock();
@@ -416,11 +421,16 @@ class Game {
 
   addBlock() {
     let lastBlock = this.blocks[this.blocks.length - 1];
-
     if (lastBlock && lastBlock.state == lastBlock.STATES.MISSED) {
+      const currentScore = this.blocks.length - 2 + specialScore;
+      if (currentScore >= highestScore) {
+        highestScore = currentScore;
+        localStorage.setItem("highestScore", highestScore);
+        highestScoreElement.innerText = `Highest score: ${highestScore}`;
+      }
+      textElement.style.animation = "fade-in-up-2 0.5s ease forwards";
       return this.endGame();
     }
-
     scoreNumberElement.innerHTML = `<div id='score-number'>${String(this.blocks.length - 1 + specialScore)}</div>`;
 
     if (highlightPositions.length === textContent.replace(/\s/g, "").length && !completeSpecialString) {
@@ -429,6 +439,9 @@ class Game {
       scoreNumberElement.innerHTML = `<div id='score-number'>${String(
         this.blocks.length - 1 + specialScore
       )}<span class="add-score">+ 10</span></div>`;
+      setTimeout(() => {
+        textElement.style.animation = "fade-in-up-2 0.5s ease forwards";
+      }, 1000);
     }
     this.scoreContainer.innerHTML = scoreNumberElement.innerHTML;
 
